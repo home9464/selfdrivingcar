@@ -8,7 +8,7 @@ from evdev import  InputDevice
 
 from wheel import Wheel
 from camera import Camera
-#from servo import Servo
+from servo import Servo
 
 try:
     gamepad = InputDevice('/dev/input/event0')
@@ -19,7 +19,7 @@ except OSError as e:
 
 driver = Wheel()
 cam = Camera()
-#serv = Servo()
+serv = Servo()
 
 async def read_gamepad():
     STICK_OR_PAD_TYPE = 3
@@ -73,8 +73,8 @@ async def read_gamepad():
                 driver.drive(direction)
 
             if  event.code == CODE_RIGHT_STICK_VERTICAL or event.code == CODE_RIGHT_STICK_HORIZONTAL:
-                pass
-                #serv.angle(random.randint(0, 180))
+                serv.angle(0, random.randint(0, 120))
+                serv.angle(1, random.randint(0, 120))
 
 async def read_camera():
     await cam.start()
