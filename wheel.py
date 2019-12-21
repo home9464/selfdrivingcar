@@ -35,8 +35,8 @@ class Wheel:
         GPIO.setup(self.PIN['motor2_A'], GPIO.OUT)
         # PWM1 - Backward
         GPIO.setup(self.PIN['motor2_B'], GPIO.OUT)
-        self.pwm1 = GPIO.PWM(self.PIN['motor1_pwm'], 100)   # Initialize PWM on pwmPin 100Hz frequency
-        self.pwm2 = GPIO.PWM(self.PIN['motor2_pwm'], 100)   # Initialize PWM on pwmPin 100Hz frequency
+        self.pwm1 = GPIO.PWM(self.PIN['motor1_pwm'], 1000)   # Initialize PWM on pwmPin 1000Hz frequency
+        self.pwm2 = GPIO.PWM(self.PIN['motor2_pwm'], 1000)   # Initialize PWM on pwmPin 1000Hz frequency
         self.pwm1.start(0) # Start PWM with 0% duty cycle
         self.pwm2.start(0) # Start PWM with 0% duty cycle
         self.pwm1_forward_flag = 0
