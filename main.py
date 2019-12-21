@@ -4,12 +4,12 @@ import functools
 import asyncio
 
 from wheel import Wheel
-from camera import Camera
+#from camera import Camera
 from servo import Servo
 from gamepad import XboxController
 
 driver = Wheel()
-cam = Camera()
+#cam = Camera()
 serv = Servo()
 controller = XboxController()
 controller.register('drive', driver.drive)
@@ -33,7 +33,7 @@ async def main():
         pass
     finally:
         driver.close()
-        cam.close()
+        #cam.close()
 
 if __name__ == '__main__':
     asyncio.run(main())
