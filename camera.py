@@ -1,38 +1,58 @@
+import sys
+import cv2
 import asyncio
 
-import cv2
+assert sys.version_info >= (3, 5, 2)
+
+#FRAME_SEPARATOR = b'\xE2\x82\xAC\xE2\x82\xAC'
+# (chr(255)+chr(0)+chr(0)+chr(0)+chr(255)+chr(0)+chr(0)+chr(0)+chr(255)).encode('utf-8')
 
 class Camera:
-    def __init__(self, width: int=320, height:int=240, frame_rate:int=10):
-        self.frame_width = width
-        self.frame_height = height
-        self.frame_rate = frame_rate  # per second
-        self.started = False
-    
-    async def onoff(self):
-        """turn on / off camera
-        """
-        await self.start() if not self.started else self.close()
-
-    async def start(self):
+    def __init__(self,
+                 server_ip='192.168.1.33', 
+                 server_port=8888,
+                 video_width=1280,
+                 video_height=720,
+                 video_color_gray=False):
+        self.server_ip = server_ip
+        self.server_port = server_port
+        self.video_width = video_width
+        self.video_height = video_height
+        self.video_color_gray = video_color_gray
+        self.frame_separator = b'\xc3\xbf\x00\x00\x00\xc3\xbf\x00\x00\x00\xc3\xbf'
         self.cap = cv2.VideoCapture(0)
-        self.cap.set(cv2.CAP_PROP_FRAME_WIDTH, self.frame_width)
-        self.cap.set(cv2.CAP_PROP_FRAME_HEIGHT, self.frame_height)
-        self.started = True
-        print('Camera started')
-        """
+        self.cap.set(3, self.video_width)  # width
+        self.cap.set(4, self.video_height)   # height
+        # start camera
+    
+    async def start(self):
+        # connect to server
+        self.reader, self.writer = await asyncio.open_connection(self.server_ip, self.server_port)
         while True:
             ret, frame = self.cap.read()
-            await asyncio.sleep(1 / self.frame_rate)
-            cv2.imshow('frame', frame)
+            if self.video_color_gray:
+                frame = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
+            encoded, buffer = cv2.imencode('.jpg', frame)
+            data = buffer.tostring()  # class 'bytes'
+            self.writer.write(data)
+            self.writer.write(self.frame_separator)
+            await self.writer.drain()
             if cv2.waitKey(1) & 0xFF == ord('q'):
                 break
-        """
+        #print('Close the camera')
+        #cap.release()
+        #cv2.destroyAllWindows()
+        #print('Close the connection')
+        #writer.close()
+        #await writer.wait_closed()
+    
     async def close(self):
+        print('Close the camera')
         self.cap.release()
         cv2.destroyAllWindows()
-        self.started = False
-        print('Camera stopped')
+        print('Close the connection')
+        self.writer.close()
+        await self.writer.wait_closed()
 
 #if __name__ == '__main__':
-#    asyncio.run(Camera().start())
+#    asyncio.run(client_camera())

@@ -4,12 +4,12 @@ import functools
 import asyncio
 
 from wheel import Wheel
-#from camera import Camera
+from camera import Camera
 from servo import Servo
 from gamepad import XboxController
 
 driver = Wheel()
-#cam = Camera()
+cam = Camera()
 serv = Servo()
 controller = XboxController()
 controller.register('drive', driver.drive)
@@ -21,22 +21,25 @@ controller.register('servo1', functools.partial(serv.angle, 1))
 async def start_controller():
     await controller.start()
 
-#async def start_camera():
-#    await cam.start()
+async def start_camera():
+    await cam.start()
 
 async def main():
     print("press Ctl-C to exit")
     #print("camera initialization")
     try:
-        #await asyncio.gather(start_camera(),start_controller())
-        await asyncio.gather(start_controller())
+        task1 = asyncio.create_task(controller.start())
+        task2 = asyncio.create_task(cam.start())
+        await task1
+        await task2
+        #await asyncio.gather(start_controller())
     except KeyboardInterrupt as e:
         print(e)
     except Exception as e:
         print(e)
     finally:
         driver.close()
-        #cam.close()
+        cam.close()
 
 if __name__ == '__main__':
     asyncio.run(main())

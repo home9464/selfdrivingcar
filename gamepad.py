@@ -3,6 +3,7 @@
 1. it was not started
 2. powered off after connection
 """
+import asyncio
 import random
 from evdev import  InputDevice
 
@@ -102,14 +103,15 @@ class XboxController:
                         self.events_value['servo0'] = random.randint(0, 120)
                         self.events_value['servo1'] = random.randint(0, 120)
 
-                    if  event.code == CODE_BUTTON_VIEW and event.value == 1:  # turn on / off camera
-                        self.events_value['camera_onoff'] = 1 - self.events_value['camera_onoff']
+                    #if  event.code == CODE_BUTTON_VIEW and event.value == 1:  # turn on / off camera
+                    #    self.events_value['camera_onoff'] = 1 - self.events_value['camera_onoff']
 
                     for evt, callbacks in self.events_callback.items():
                         for cb in callbacks:
                             if self.events_value[evt] is not None:
                                 cb(self.events_value[evt])
                                 self.events_value[evt] = None
+                #await asyncio.sl
             except OSError as e:  # when controller was poweroff
                 print('Controller not connected')
                 self._wait_until_connected()
@@ -117,7 +119,6 @@ class XboxController:
             pass
 
 if __name__ == '__main__':
-    import asyncio
     async def main():
         controller = XboxController()
         try:

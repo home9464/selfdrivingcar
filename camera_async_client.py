@@ -9,7 +9,7 @@ assert sys.version_info >= (3, 5, 2)
 FRAME_SEPARATOR = b'\xc3\xbf\x00\x00\x00\xc3\xbf\x00\x00\x00\xc3\xbf'
 
 
-async def tcp_echo_client(server_ip='192.168.1.33', 
+async def client_camera(server_ip='192.168.1.33', 
                           server_port=8888,
                           video_width=1280,
                           video_height=720,
@@ -39,4 +39,4 @@ async def tcp_echo_client(server_ip='192.168.1.33',
     await writer.wait_closed()
 
 if __name__ == '__main__':
-    asyncio.run(tcp_echo_client())
+    asyncio.run(client_camera())
