@@ -34,5 +34,5 @@ class Camera:
         self.started = False
         print('Camera stopped')
 
-if __name__ == '__main__':
-    asyncio.run(Camera().start())
+#if __name__ == '__main__':
+#    asyncio.run(Camera().start())
