@@ -37,15 +37,11 @@ class Camera:
             self.writer.write(data)
             self.writer.write(self.frame_separator)
             await self.writer.drain()
+            await asyncio.sleep(0)
             if cv2.waitKey(1) & 0xFF == ord('q'):
                 break
-        #print('Close the camera')
-        #cap.release()
-        #cv2.destroyAllWindows()
-        #print('Close the connection')
-        #writer.close()
-        #await writer.wait_closed()
-    
+        await self.close()
+
     async def close(self):
         print('Close the camera')
         self.cap.release()

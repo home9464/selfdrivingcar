@@ -2,12 +2,12 @@ from adafruit_servokit import ServoKit
 
 
 class Servo:
-    def __init__(self, max_angle=120):
+    def __init__(self, max_angle=180):
         self.servokit = ServoKit(channels=16)
-        self.max_angle = max_angle
+        self.max_angle = 180
         for i in range(2):
             #pass
-            #self.servokit.servo[i].set_pulse_width_range(1000, 2000)
+            self.servokit.servo[i].set_pulse_width_range(450, 2450)
             self.servokit.servo[i].actuation_range = self.max_angle
 
     def angle(self, index:int, angle:int)-> None:
@@ -21,13 +21,23 @@ class Servo:
 
 if __name__ == '__main__':
     import time
-    s = Servo(120)
+    s = Servo()
+    s.angle(0, 90)
+    time.sleep(2)
+    s.angle(0, 0)
+    time.sleep(2)
+    s.angle(0, 180)
+    time.sleep(2)
+    s.angle(0, 90)
+    time.sleep(2)
+    """
     while True:
         s.angle(0, 0)
-        for i in range(120):
+        for i in range(180):
             s.angle(0, i)
-            time.sleep(0.05)
+            time.sleep(0.5)
             #if i == 4:
             #    time.sleep(1)
             #else:
             #    time.sleep(0.2)
+    """

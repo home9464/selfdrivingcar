@@ -99,10 +99,18 @@ class XboxController:
                         #driver.drive(direction)
                         self.events_value['drive'] = direction
 
-                    if  event.code == CODE_RIGHT_STICK_VERTICAL or event.code == CODE_RIGHT_STICK_HORIZONTAL:
-                        self.events_value['servo0'] = random.randint(0, 120)
-                        self.events_value['servo1'] = random.randint(0, 120)
+                    if  event.code == CODE_RIGHT_STICK_VERTICAL:
+                        print(event.value, event.sec, event.usec, event.timestamp, event.type)
+                        'code', 'sec', 'timestamp', 'type', 'usec', 'value'
 
+                        #self.events_value['servo0'] = random.randint(0, 180)
+                        self.events_value['servo0'] = 180
+
+                    if  event.code == CODE_RIGHT_STICK_HORIZONTAL:
+                        self.events_value['servo0'] = 0
+                        #pass
+                        #print(dir(event))
+                        #self.events_value['servo0'] = random.randint(0, 180)
                     #if  event.code == CODE_BUTTON_VIEW and event.value == 1:  # turn on / off camera
                     #    self.events_value['camera_onoff'] = 1 - self.events_value['camera_onoff']
 
@@ -111,7 +119,7 @@ class XboxController:
                             if self.events_value[evt] is not None:
                                 cb(self.events_value[evt])
                                 self.events_value[evt] = None
-                #await asyncio.sl
+                await asyncio.sleep(0)
             except OSError as e:  # when controller was poweroff
                 print('Controller not connected')
                 self._wait_until_connected()

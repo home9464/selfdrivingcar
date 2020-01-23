@@ -14,7 +14,7 @@ serv = Servo()
 controller = XboxController()
 controller.register('drive', driver.drive)
 controller.register('servo0', functools.partial(serv.angle, 0))
-controller.register('servo1', functools.partial(serv.angle, 1))
+#controller.register('servo1', functools.partial(serv.angle, 1))
 #controller.register('camera_onoff', cam.onoff)
 
 
