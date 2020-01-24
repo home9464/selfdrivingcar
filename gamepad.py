@@ -100,8 +100,9 @@ class XboxController:
                         self.events_value['drive'] = direction
 
                     if  event.code == CODE_RIGHT_STICK_VERTICAL:
-                        print(event.value, event.sec, event.usec, event.timestamp, event.type)
-                        'code', 'sec', 'timestamp', 'type', 'usec', 'value'
+                        #print(event.value, event.sec, event.usec, event.timestamp, event.type)
+                        pass
+                        #'code', 'sec', 'timestamp', 'type', 'usec', 'value'
 
                         #self.events_value['servo0'] = random.randint(0, 180)
                         self.events_value['servo0'] = 180

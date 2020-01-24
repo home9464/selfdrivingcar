@@ -32,14 +32,16 @@ class Camera:
             ret, frame = self.cap.read()
             if self.video_color_gray:
                 frame = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
-            encoded, buffer = cv2.imencode('.jpg', frame)
+            encoded, buffer = cv2.imencode('.jpg', frame)  # bool, numpy.ndarray 
             data = buffer.tostring()  # class 'bytes'
             self.writer.write(data)
             self.writer.write(self.frame_separator)
             await self.writer.drain()
-            await asyncio.sleep(0)
-            if cv2.waitKey(1) & 0xFF == ord('q'):
-                break
+            # read processed info from server
+            #await asyncio.sleep(0)
+            data = await self.reader.readline()
+            print(data.decode())
+            #cv2.waitKey(1)
         await self.close()
 
     async def close(self):
