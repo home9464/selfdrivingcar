@@ -17,11 +17,11 @@ LOCAL_IP = socket.gethostbyname(socket.gethostname())
 LOCAL_PORT = 8888
 
 
-async def handle_camera(reader, writer):
+async def _handle_cam(reader, writer):
     sep_len = len(FRAME_SEPARATOR)
     while True:
         img = None
-        frame = await reader.readuntil(separator=FRAME_SEPARATOR)
+        frame = await reader.readuntil(separator=FRAME_SEPARATOR)  # blocked until read something
         # truncate the separator
         frame = frame[:-sep_len]
         frame = np.asarray(bytearray(frame), dtype=np.uint8)
@@ -29,16 +29,28 @@ async def handle_camera(reader, writer):
         if img is not None:
             cv2.imshow('jpg', img)
             cv2.waitKey(1)
+        await asyncio.sleep(0)
+
+
+async def camera_cb(reader, writer):
+    """called whenever a new client connection is established
+    """
+    try:
+        await _handle_cam(reader, writer)
+    except asyncio.IncompleteReadError:
+        print('Client failed')
+        cv2.destroyAllWindows()
 
 
 async def main():
-    server = await asyncio.start_server(handle_camera,
+    server = await asyncio.start_server(camera_cb,
                                         LOCAL_IP,
                                         LOCAL_PORT,
                                         limit=1024*1204*8)
     print('Serving on {}:{}'.format(LOCAL_IP, LOCAL_PORT))
     async with server:
         await server.serve_forever()
+
 
 if __name__ == '__main__':
     asyncio.run(main())
