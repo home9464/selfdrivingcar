@@ -17,27 +17,3 @@ class Servo:
         assert 0 <= index and index <= 1
         #assert 0 <= angle and angle <= self.max_angle
         self.servokit.servo[index].angle = angle
-
-
-if __name__ == '__main__':
-    import time
-    s = Servo()
-    s.angle(0, 90)
-    time.sleep(2)
-    s.angle(0, 0)
-    time.sleep(2)
-    s.angle(0, 180)
-    time.sleep(2)
-    s.angle(0, 90)
-    time.sleep(2)
-    """
-    while True:
-        s.angle(0, 0)
-        for i in range(180):
-            s.angle(0, i)
-            time.sleep(0.5)
-            #if i == 4:
-            #    time.sleep(1)
-            #else:
-            #    time.sleep(0.2)
-    """

@@ -2,6 +2,33 @@
 
 1. it was not started
 2. powered off after connection
+
+devadm info --query=property --name=/dev/input/event4 | grep "ID_INPUT_JOYSTICK=1"
+
+
+DEVPATH=/devices/platform/soc/fe201000.serial/tty/ttyAMA0/hci0/hci0:11/0005:045E:02E0.000A/input/input11/event4
+DEVNAME=/dev/input/event4
+MAJOR=13
+MINOR=68
+SUBSYSTEM=input
+USEC_INITIALIZED=6836871854
+ID_INPUT=1
+ID_INPUT_JOYSTICK=1
+ID_INPUT_KEY=1
+ID_BUS=bluetooth
+XKBMODEL=pc105
+XKBLAYOUT=us
+BACKSPACE=guess
+ID_INPUT_JOYSTICK_INTEGRATION=external
+ID_PATH=platform-soc
+ID_PATH_TAG=platform-soc
+ID_FOR_SEAT=input-platform-soc
+LIBINPUT_DEVICE_GROUP=5/45e/2e0:dc:a6:32:65:d4:45
+LIBINPUT_FUZZ_00=255
+LIBINPUT_FUZZ_01=255
+TAGS=:uaccess:power-switch:seat:
+
+
 """
 import asyncio
 import random
@@ -33,11 +60,19 @@ CODE_BUTTON_MENU = 311
 
 
 class XboxController:
-    def __init__(self):
+    def __init__(self, debug=False):
         self._wait_until_connected()
         self.events_callback = {'drive':[], 'servo0':[], 'servo1':[]}
         self.events_value = {'drive':None, 'servo0':None, 'servo1':None, 'camera_onoff': 0}
+        self.debug = debug
 
+    def _find_input_device(self):
+        """
+        multiple devices may present. e.g. a wireless mouse receiver.
+        find the correct device.
+
+        udevadm info --query=property --name=/dev/input/event4 | grep "ID_INPUT_JOYSTICK=1"
+        """
     def _wait_until_connected(self):
         self.controller = None
         while self.controller is None:
@@ -67,7 +102,8 @@ class XboxController:
         while True:
             try:
                 async for event in self.controller.async_read_loop():
-                    #print(dir(event))
+                    if self.debug:
+                        print('code, type, value:', event.code, event.type,  event.value)
                     if  event.code == CODE_PAD_HORIZONTAL or event.code == CODE_PAD_VERTICAL:
                         # either x!=0 or y!=0 or both != 0
                         x = event.value if event.code == CODE_PAD_HORIZONTAL else 0

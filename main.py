@@ -17,13 +17,6 @@ controller.register('servo0', functools.partial(serv.angle, 0))
 #controller.register('servo1', functools.partial(serv.angle, 1))
 #controller.register('camera_onoff', cam.onoff)
 
-
-async def start_controller():
-    await controller.start()
-
-async def start_camera():
-    await cam.start()
-
 async def main():
     print("press Ctl-C to exit")
     #print("camera initialization")
@@ -32,7 +25,6 @@ async def main():
         task2 = asyncio.create_task(cam.start())
         await task1
         await task2
-        #await asyncio.gather(start_controller())
     except KeyboardInterrupt as e:
         print(e)
     except Exception as e:
