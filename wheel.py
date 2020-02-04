@@ -23,29 +23,23 @@ class Wheel:
         #GPIO.setmode(GPIO.BOARD)  # Set Pi to use pin number when referencing GPIO pins.
         GPIO.setmode(GPIO.BCM)  # Set Pi to use pin number when referencing GPIO pins.
         self.PIN = BCM_PIN
-        # Set GPIO pin 12 (PWM0) to output mode.
         GPIO.setup(self.PIN['motor1_pwm'], GPIO.OUT)
-        # Set GPIO pin 13 (PWM1) to output mode.  
         GPIO.setup(self.PIN['motor2_pwm'], GPIO.OUT)
-        # PWM0 - Forward 
         GPIO.setup(self.PIN['motor1_A'], GPIO.OUT)
-        # PWM0 - Backward
         GPIO.setup(self.PIN['motor1_B'], GPIO.OUT)
-        # PWM1 - Forward
         GPIO.setup(self.PIN['motor2_A'], GPIO.OUT)
-        # PWM1 - Backward
         GPIO.setup(self.PIN['motor2_B'], GPIO.OUT)
+        # the 1st motor
         self.pwm1 = GPIO.PWM(self.PIN['motor1_pwm'], 1000)   # Initialize PWM on pwmPin 1000Hz frequency
+        # the 2nd motor
         self.pwm2 = GPIO.PWM(self.PIN['motor2_pwm'], 1000)   # Initialize PWM on pwmPin 1000Hz frequency
-        self.pwm1.start(0) # Start PWM with 0% duty cycle
-        self.pwm2.start(0) # Start PWM with 0% duty cycle
+        self.pwm1.start(0) # Start the 1st motor  with 0% duty cycle
+        self.pwm2.start(0) # Start the 2nd motor  with 0% duty cycle
         self.pwm1_forward_flag = 0
         self.pwm2_forward_flag = 0
 
-
     def stop(self):
         self.throttle(0)
-
 
     def _pin(self, a, b, c, d):
         GPIO.output(self.PIN['motor1_A'], a)
