@@ -1,4 +1,4 @@
-# selfdrivingcar
+# self driving car
 
 Image recognition with Machine Learning, uses an onboard cam on a RC car 
 
@@ -7,9 +7,6 @@ sudo apt-get install -y libqt4-test libatlas-base-dev libjasper-dev libqtgui4 py
 sudo pip3 install opencv-python==3.4.6.27 adafruit-circuitpython-servokit evdev
 sudo pip3 install tensorflow-1.14.0-cp37-cp37m-linux_armv7l.whl
 ```
-
-# 
-Using XBox control to teach the car how to drive
 
 ## start the app on boot
 
