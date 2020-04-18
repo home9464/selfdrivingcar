@@ -6,13 +6,13 @@ import threading
 
 from quart import Quart, request, jsonify
 from servo import Servo
-from camsrv import broadcast
 from wheel import Wheel
+from broadcast import VideoBroadcastThread
 
-start_video = False
 
 ###################################################
 # start a thread to broadcast video only
+start_video = False
 def broadcast_video():
     video_loop = asyncio.new_event_loop()
     video_loop.create_task(broadcast(video_loop))
@@ -25,6 +25,8 @@ if start_video:
 app = Quart(__name__)
 svo = Servo()
 drv = Wheel()
+
+video_broadcast = None
 
 @app.route('/', methods=['GET'])
 async def index():
@@ -49,6 +51,25 @@ async def camera():
     if content is not None:
         angle = int(content['angle'])
         svo.angle(0, angle)
+    return ('', 200)
+
+@app.route('/broadcast', methods=['POST'])
+async def broadcast():
+    global video_broadcast
+    content = await request.get_json()
+    if content is not None:
+        action = content['action']
+        if action == 'start':
+            if video_broadcast is None:
+                video_broadcast = VideoBroadcastThread() 
+                video_broadcast.start() 
+        elif action == 'stop':
+            print('stop video')
+            if video_broadcast is not None:
+                video_broadcast.stop() 
+                print('exception')
+                #video_broadcast.join()
+                video_broadcast = None
     return ('', 200)
 
 if __name__ == '__main__':
