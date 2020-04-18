@@ -63,7 +63,7 @@ async def camera_cb(reader, writer):
         writer.close()
         #await writer.wait_closed()
 
-async def main():
+async def main2():
     ip_addr = local_ip()
     port = 8888
     server = await asyncio.start_server(camera_cb, host=ip_addr, port=port)
@@ -78,6 +78,21 @@ async def main():
     #server.close()
     #await server.wait_closed()
 
+async def broadcast(loop):
+    ip_addr = local_ip()
+    port = 8888
+    server = await asyncio.start_server(camera_cb, host=ip_addr, port=port, loop=loop)
+    print('Serving on {}:{}'.format(ip_addr, port))
+    try:
+        async with server:
+            await server.serve_forever()
+    except KeyboardInterrupt:
+        server.close()
+        await server.wait_closed()
+    #await asyncio.sleep(600)
+    #server.close()
+    #await server.wait_closed()
+
 if __name__ == '__main__':
     uvloop.install()
-    asyncio.run(main())
+    asyncio.run(broadcast())

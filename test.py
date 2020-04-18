@@ -2,6 +2,7 @@ import time
 import cv2
 from servo import Servo
 from gamepad import XboxController
+
 def test_servo():
     print("Testing servo")
     s = Servo()
@@ -18,9 +19,9 @@ def test_servo():
 
 def test_onboard_cam():
     cap = cv2.VideoCapture(0)
-    while(True):
+    while True:
         ret, frame = cap.read()
-        cv2.imshow('frame',frame)
+        cv2.imshow('frame', frame)
         if cv2.waitKey(1) & 0xFF == ord('q'):
             break
     cap.release()
@@ -38,6 +39,20 @@ def test_controller():
             pass
     asyncio.run(main())
 
+def test_rest():
+
+    import requests
+    url = 'http://192.168.1.3:5000/direction'
+    data = {'duration': '0.1', 'direction': '2'}
+    x = requests.post(url, json = data)
+    print(x.status_code)
+
+    url = 'http://192.168.1.3:5000/camera'
+    data = {'angle': '180'}
+    x = requests.post(url, json = data)
+    print(x.status_code)
+
 if __name__ == '__main__':
     #test_servo()
-    test_controller()
+    #test_controller()
+    test_onboard_cam()
