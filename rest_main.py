@@ -1,3 +1,4 @@
+#!/usr/bin/python3
 import asyncio
 import random
 import time
@@ -6,7 +7,7 @@ import threading
 from quart import Quart, request, jsonify
 from servo import Servo
 from camsrv import broadcast
-from wheel_pi3 import Wheel
+from wheel import Wheel
 
 start_video = False
 
