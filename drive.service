@@ -3,7 +3,7 @@ Description=drive the car
 After=multi-user.target
 
 [Service]
-ExecStart=/usr/bin/python3 /home/pi/Desktop/workspace/selfdrivingcar/main.py
+ExecStart=/usr/bin/python3 /home/pi/Desktop/project/selfdrivingcar/rest_main.py
 
 [Install]
 WantedBy=multi-user.target

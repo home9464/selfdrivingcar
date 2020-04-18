@@ -19,10 +19,13 @@ BOARD_PIN = {
 }
 
 class Wheel:
-    def __init__(self):
-        #GPIO.setmode(GPIO.BOARD)  # Set Pi to use pin number when referencing GPIO pins.
-        GPIO.setmode(GPIO.BCM)  # Set Pi to use pin number when referencing GPIO pins.
-        self.PIN = BCM_PIN
+    DIRECTION_FORWARD = 1
+    DIRECTION_BACKWARD = 2
+    DIRECTION_LEFT = 3
+    DIRECTION_RIGHT = 4
+    def __init__(self, mode=GPIO.BCM):  # or GPIO.BOARD
+        GPIO.setmode(mode)  # Set Pi to use pin number when referencing GPIO pins.
+        self.PIN = BCM_PIN if mode == GPIO.BCM else BOARD_PIN
         GPIO.setup(self.PIN['motor1_pwm'], GPIO.OUT)
         GPIO.setup(self.PIN['motor2_pwm'], GPIO.OUT)
         GPIO.setup(self.PIN['motor1_A'], GPIO.OUT)
@@ -85,3 +88,12 @@ class Wheel:
         self.pwm1.stop()
         self.pwm2.stop()
         GPIO.cleanup()
+
+if __name__ =='__main__':
+    import time
+    drive = Wheel()
+    for direction in [1, 2, 3, 4]:
+        drive.drive(direction)
+        time.sleep(1)
+    drive.drive(0)
+    drive.close()
