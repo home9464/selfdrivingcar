@@ -27,13 +27,9 @@ drv = Wheel()
 
 @app.route('/', methods=['GET'])
 async def index():
-    svo.angle(0, random.randint(0, 100))
-    drv.drive(1)
-    time.sleep(0.1)
-    drv.drive(0)
+    svo.angle(0, random.randint(0, 180))
     await asyncio.sleep(0)
     return ('', 200)
-
 
 @app.route('/direction', methods=['POST'])
 async def direction():
@@ -44,7 +40,6 @@ async def direction():
         drv.drive(direction)
         await asyncio.sleep(seconds)
         drv.drive(0)
-    await asyncio.sleep(0)
     return ('', 200)
 
 @app.route('/camera', methods=['POST'])
@@ -53,7 +48,6 @@ async def camera():
     if content is not None:
         angle = int(content['angle'])
         svo.angle(0, angle)
-    await asyncio.sleep(0)
     return ('', 200)
 
 if __name__ == '__main__':
