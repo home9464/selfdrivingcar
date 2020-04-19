@@ -40,9 +40,10 @@ async def direction():
     if content is not None:
         seconds = float(content['duration'])
         direction = int(content['direction'])
-        drv.drive(direction)
-        await asyncio.sleep(seconds)
-        drv.drive(0)
+        throttle = int(content['throttle'])
+        drv.drive(direction, throttle)  # start driving
+        if direction != 0:
+            await asyncio.sleep(seconds)  # driving time
     return ('', 200)
 
 @app.route('/camera', methods=['POST'])

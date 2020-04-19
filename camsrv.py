@@ -20,8 +20,8 @@ FRAME_SEPARATOR = b'\xc3\xbf\x00\x00\x00\xc3\xbf\x00\x00\x00\xc3\xbf'
 FPS_RATE = 5 # frames per second
 
 #video_width, video_height = 1280, 960
-#video_width, video_height = 640, 480
-video_width, video_height = 480, 320
+video_width, video_height = 640, 480
+#video_width, video_height = 480, 320
 #video_width, video_height = 320, 240
 
 cap = cv2.VideoCapture(0)

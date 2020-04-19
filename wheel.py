@@ -50,36 +50,36 @@ class Wheel:
         GPIO.output(self.PIN['motor2_A'], c)
         GPIO.output(self.PIN['motor2_B'], d)
 
-    def forward(self):
-        self.throttle(100)
+    def forward(self, percent=100):
+        self.throttle(percent)
         self._pin(0, 1, 1, 0)
 
-    def backward(self):
-        self.throttle(100)
+    def backward(self, percent=100):
+        self.throttle(percent)
         self._pin(1, 0, 0, 1)
 
-    def left(self):
-        self.throttle(100)
+    def left(self, percent=100):
+        self.throttle(percent)
         self._pin(0, 1, 0, 1)
 
-    def right(self):
-        self.throttle(100)
+    def right(self, percent=100):
+        self.throttle(percent)
         self._pin(1, 0, 1, 0)
 
-    def drive(self, direction:int) -> None:
+    def drive(self, direction:int, percent:int=100) -> None:
         assert 0 <= direction and direction <= 4
         if direction == 0:
-            self.stop()
+            self.stop(percent)
         elif direction == 1:
-            self.forward()
+            self.forward(percent)
         elif direction == 2:
-            self.backward()
+            self.backward(percent)
         elif direction == 3:
-            self.left()
+            self.left(percent)
         elif direction == 4:
-            self.right()
+            self.right(percent)
             
-    def throttle(self, percentage: int = 50) -> None:
+    def throttle(self, percentage: int = 100) -> None:
         assert 0 <= percentage and percentage <= 100
         self.pwm1.ChangeDutyCycle(percentage)
         self.pwm2.ChangeDutyCycle(percentage)
