@@ -1,5 +1,6 @@
 """capture and broadcast video (sending to a port)
 
+
 if the ip is local, then it expose the video stream data to any consumers
 if the ip is remote, then it send the video stream data to that remote consumer only
 
